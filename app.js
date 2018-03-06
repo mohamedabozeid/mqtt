@@ -6,8 +6,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var passport = require('passport');
-var session = require('express-session');
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -19,15 +18,7 @@ var mqttServer =   mqtt;
 
 mqttServer.init();
 var app = express();
-var googleStrategy = require('passport-google-oauth').OAuth2Strategy;
-passport.use(new googleStrategy({
-  clientID:'913934598200-uauosvmjsncfvgbb58bs9c3b0itsd2oc.apps.googleusercontent.com',
-  clientSecret:'i9u3jtklYjmxhibSyh3JGTpF',
-  callbackURL:'http://localhost:3000/auth/google/callback'},
- function(req, accessToken, refreshToken, profile, done){
-   done(null, profile);
- }
-));
+
 // view engine setup 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -40,18 +31,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({secret: 'anything'}));
-app.use(passport.initialize());
-app.use(passport.session());
+require('./config/passport')(app);
 
-passport.serializeUser(function(user, done){
-  //put the user in the session
-  done(null, user);
-});
-passport.deserializeUser(function(user, done){
-  //pull user back out of the session.
-  done(null, user);
-});
 app.use('/', index);
 app.use('/users', users);
 app.use('/mqtt', mqttController);

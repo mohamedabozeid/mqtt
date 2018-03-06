@@ -13,7 +13,7 @@ mqttServer.prototype.init = function(){
      this.client = client;
     client.on('connect', function () {
       client.subscribe('#');
-      client.publish('presence', 'Hello cloud mqtt');
+      //client.publish('presence', 'Hello cloud mqtt');
     })
      
     client.on('message', function (topic, message) {
