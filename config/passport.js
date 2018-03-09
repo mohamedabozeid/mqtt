@@ -2,6 +2,8 @@ var passportConfig = function(app){
     var passport = require('passport');
     var session = require('express-session');
     require('./strategies/google')();
+    require('./strategies/twitter')();
+    require('./strategies/facebook')();
 
 
     app.use(session({secret: 'anything'}));

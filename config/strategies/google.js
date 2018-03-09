@@ -1,6 +1,7 @@
 var passport = require('passport');
+var googleStrategy = require('passport-google-oauth').OAuth2Strategy;
+
 module.exports = function(){
-    var googleStrategy = require('passport-google-oauth').OAuth2Strategy;
     passport.use(new googleStrategy({
     clientID:'913934598200-uauosvmjsncfvgbb58bs9c3b0itsd2oc.apps.googleusercontent.com',
     clientSecret:'i9u3jtklYjmxhibSyh3JGTpF',
