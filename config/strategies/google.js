@@ -5,7 +5,7 @@ module.exports = function(){
     passport.use(new googleStrategy({
     clientID:'913934598200-uauosvmjsncfvgbb58bs9c3b0itsd2oc.apps.googleusercontent.com',
     clientSecret:'i9u3jtklYjmxhibSyh3JGTpF',
-    callbackURL:'http://localhost:3000/auth/google/callback'},
+    callbackURL:'https://mqtt-heroku.herokuapp.com/auth/google/callback'},
     function(req, accessToken, refreshToken, profile, done){
         var user = {};
         user.email = profile.emails[0].value;
