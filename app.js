@@ -13,6 +13,8 @@ var users = require('./routes/users');
 var mqtt = require('./mqtt/test');
 var auth = require('./routes/auth');
 var mqttController = require('./routes/mqtt');
+var dbContext = require('./db/context');
+dbContext.init();
 var mqttServer =   mqtt;
 
 
