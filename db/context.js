@@ -75,6 +75,17 @@ dbContext.prototype.findDocuments = function(db, callback) {
     });  
   }
 
+  dbContext.prototype.indexCollection = function(db, callback) {
+    db.collection('documents').createIndex(
+      { "a": 1 },
+        null,
+        function(err, results) {
+          console.log(results);
+          callback();
+      }
+    );
+  };
+
   dbContext.prototype.removeDocument = function(db, callback) {
     // Get the documents collection
     const collection = db.collection('documents');
