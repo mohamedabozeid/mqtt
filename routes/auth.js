@@ -35,4 +35,16 @@ router.route('/facebook')
     .get(passport.authenticate('facebook', {
         scope: ['email']
     }));
+
+router.route('/login').post(
+    passport.authenticate('local', { failureRedirect: '/auth/google' }),
+    function(req, res) {
+      return  res.sendStatus(200);
+    });
+
+router.route('/profile').get( function(req, res, next){
+    if(!req.user) return res.sendStatus(401);
+    return res.send(req.user);
+});
+
 module.exports = router;
