@@ -37,9 +37,12 @@ router.route('/facebook')
     }));
 
 router.route('/login').post(
-    passport.authenticate('local', { failureRedirect: '/auth/google' }),
+    passport.authenticate('local'),
     function(req, res) {
-      return  res.sendStatus(200);
+      return  res.send({
+          status: "OK",
+          user: req.user
+      });
     });
 
 router.route('/profile').get( function(req, res, next){
