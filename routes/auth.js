@@ -1,6 +1,7 @@
 
 var express = require('express');
 var passport = require('passport');
+var tokenizer = require('../config/tokenHandler');
 var router = express.Router();
 
 router.route('/google/callback')
@@ -37,13 +38,10 @@ router.route('/facebook')
     }));
 
 router.route('/login').post(
-    passport.authenticate('local'),
-    function(req, res) {
-      return  res.send({
-          status: "OK",
-          user: req.user
-      });
-    });
+    passport.authenticate('local',{
+        session: false
+      }),tokenizer.serialize, tokenizer.generateToken, tokenizer.respond
+);
 
 router.route('/profile').get( function(req, res, next){
     if(!req.user) return res.sendStatus(401);

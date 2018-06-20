@@ -12,6 +12,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var mqtt = require('./mqtt/test');
 var auth = require('./routes/auth');
+var devices =  require('./routes/devices');
 var mqttController = require('./routes/mqtt');
 var dbContext = require('./db/context');
 dbContext.init();
@@ -31,15 +32,18 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 require('./config/passport')(app);
+
 
 app.use('/', index);
 app.use('/users', users);
 app.use('/mqtt', mqttController);
 app.use('/auth', auth);
-
+app.use('/devices', devices);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -49,6 +53,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  console.log(err);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
