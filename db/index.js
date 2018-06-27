@@ -1,1 +1,2 @@
-exports.users = require('./user');
+exports.users = require('./userRepository');
+exports.devices = require('./deviceRepository');
