@@ -38,7 +38,7 @@ service.prototype.execute = function (userId, cmd, cb, errorCb) {
     devicesRepo.findDevice(userId, cmd.deviceId, (device) => {
         if(!device) return errorCb(new Error(`Could not retrieve device ${cmd.deviceId}`));
         if(!device.mqttId) return new errorCb(new Error(`device ${cmd.deviceId} deos have mqttId, please reconfigure`));
-        mqttClient.sendMsg(`cmnd/DVES_${device.mqttId}}/IRhvac`, `{"Vendor": "Fujitsu", "Power": ${cmd.cmd}, "Mode":"Hot", "FanSpeed":1, "Temp":20," Swing":0}`);
+        mqttClient.sendMsg(`cmnd/DVES_${device.mqttId}/IRhvac`, `{"Vendor": "Fujitsu", "Power": ${cmd.cmd}, "Mode":"Hot", "FanSpeed":1, "Temp":20," Swing":0}`);
         return cb(true);
     }, (error) => {
         return errorCb(error);
