@@ -36,7 +36,15 @@ router.post('/save', tokenizer.authenticate, function (req, res) {
     res.send(device);
   }, error => {
     throw error;
-  })
+  });
+});
+
+router.post('/execute', tokenizer.authenticate, function (req, res) {
+  deviceSrv.execute(req.user.data.id, req.body, result => {
+    res.send({result: 'OK'});
+  }, error => {
+    throw error;
+  });
 });
 
 

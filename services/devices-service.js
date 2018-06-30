@@ -1,6 +1,7 @@
-var devicesRepo = require('../db').devices;
-var usersRepo = require('../db').users;
-var _ = require('lodash');
+const devicesRepo = require('../db').devices;
+const usersRepo = require('../db').users;
+const _ = require('lodash');
+const mqttClient = require('../mqtt/test');
 
 var service = function () { }
 service.prototype.verify = function (userId, deviceId, cb, errorCb) {
@@ -29,6 +30,25 @@ service.prototype.save = function (device, cb, errorCb) {
     }, function (error) {
         errorCb(error);
     });
+}
+
+service.prototype.execute = function (userId, cmd, cb, errorCb) {
+    console.log(cmd);
+    if (!userId || !cmd.deviceId) return errorCb(new Error('Invalid Input, UserId or device is NULL'));
+    devicesRepo.findDevice(userId, cmd.deviceId, (device) => {
+        if(!device) return errorCb(new Error(`Could not retrieve device ${cmd.deviceId}`));
+        if(!device.mqttId) return new errorCb(new Error(`device ${cmd.deviceId} deos have mqttId, please reconfigure`));
+        mqttClient.sendMsg(`cmnd/DVES_${device.mqttId}}/IRhvac`, `{"Vendor": "Fujitsu", "Power": ${cmd.cmd}, "Mode":"Hot", "FanSpeed":1, "Temp":20," Swing":0}`);
+        return cb(true);
+    }, (error) => {
+        return errorCb(error);
+    });
+    // devicesRepo.save(device, function (result) {
+    //   cb(result);
+    // }, function (error) {
+    //  errorCb(error);
+    // });
+    
 }
 
 

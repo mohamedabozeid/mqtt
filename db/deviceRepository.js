@@ -34,9 +34,19 @@ module.exports = {
         let deviceId = device._id;
         delete device._id;
         const collection = db.collection(DevicesTable);
-        collection.update({ _id: ObjectId(deviceId) }, device,null, function (err, result) {
+        collection.update({ _id: ObjectId(deviceId) }, device, null, function (err, result) {
             if (err) return errorCb(err);
             return cb(result);
+        });
+    },
+    findDevice(userId, deviceId, cb, errorCb) {
+        if (!userId || !deviceId) return errorCb(new Error('invalid  input, deviceId or User is null'));
+        var db = context.db;
+        const collection = db.collection(DevicesTable);
+        collection.find({ _id: ObjectId(deviceId), userId: userId }).toArray((error, devices) => {
+            if (error) return errorCb(error);
+            if (!devices || devices.length < 1) return errorCb(new Error('Could not find device with this Idfor this user'));
+            return cb(devices[0]);
         });
     }
 }
